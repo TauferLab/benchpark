@@ -1,7 +1,7 @@
 from spack import *
 
 
-class A4mdBenchmark(CachedCmakePackage):
+class A4mdBenchmark(CachedCMakePackage):
     
     homepage = "https://analytics4md.org/"
     git      = "git@github.com:Analytics4MD/a4md-benchmark.git"
