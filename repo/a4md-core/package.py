@@ -36,23 +36,23 @@ class A4mdCore(CachedCMakePackage):
         
         if self.spec.satisfies("+caliper"):
             entries.append(cmake_cache_option("ENABLE_PERF", True))
-            entries.append(cmake_cache_option("A4MD_PERF_PLUGIN", "CALIPER"))
+            entries.append(cmake_cache_string("A4MD_PERF_PLUGIN", "CALIPER"))
         else:
             entries.append(cmake_cache_option("ENABLE_PERF", False))
             
         if self.spec.satisfies("log_level=critical"):
-            entries.append(cmake_cache_option("A4MD_LOG_LEVEL", "CRITICAL"))
+            entries.append(cmake_cache_string("A4MD_LOG_LEVEL", "CRITICAL"))
         elif self.spec.satisfies("log_level=error"):
-            entries.append(cmake_cache_option("A4MD_LOG_LEVEL", "ERROR"))
+            entries.append(cmake_cache_string("A4MD_LOG_LEVEL", "ERROR"))
         elif self.spec.satisfies("log_level=warn"):
-            entries.append(cmake_cache_option("A4MD_LOG_LEVEL", "WARN"))
+            entries.append(cmake_cache_string("A4MD_LOG_LEVEL", "WARN"))
         elif self.spec.satisfies("log_level=info"):
-            entries.append(cmake_cache_option("A4MD_LOG_LEVEL", "INFO"))
+            entries.append(cmake_cache_string("A4MD_LOG_LEVEL", "INFO"))
         elif self.spec.satisfies("log_level=debug"):
-            entries.append(cmake_cache_option("A4MD_LOG_LEVEL", "DEBUG"))
+            entries.append(cmake_cache_string("A4MD_LOG_LEVEL", "DEBUG"))
         elif self.spec.satisfies("log_level=trace"):
-            entries.append(cmake_cache_option("A4MD_LOG_LEVEL", "TRACE"))
+            entries.append(cmake_cache_string("A4MD_LOG_LEVEL", "TRACE"))
         else:
-            entries.append(cmake_cache_option("A4MD_LOG_LEVEL", "NONE"))
+            entries.append(cmake_cache_string("A4MD_LOG_LEVEL", "NONE"))
             
         return entries

@@ -51,28 +51,28 @@ class Dyad(CachedCMakePackage, AutotoolsPackage):
         entries.append(cmake_cache_option("DYAD_ENABLE_UCX_DATA_RMA", self.spec.satisfies("+ucx_rma")))
 
         if self.spec.satisfies("+caliper"):
-            entries.append(cmake_cache_option("DYAD_PROFILER", "CALIPER"))
+            entries.append(cmake_cache_string("DYAD_PROFILER", "CALIPER"))
         elif self.spec.satisfies("+dftracer"):
-            entries.append(cmake_cache_option("DYAD_PROFILER", "DLIO_PROFILER"))
+            entries.append(cmake_cache_string("DYAD_PROFILER", "DLIO_PROFILER"))
         else:
-            entries.append(cmake_cache_option("DYAD_PROFILER", "NONE"))
+            entries.append(cmake_cache_string("DYAD_PROFILER", "NONE"))
 
         if self.spec.satisfies("logger=flux"):
-            entries.append(cmake_cache_option("DYAD_LOGGER", "FLUX"))
+            entries.append(cmake_cache_string("DYAD_LOGGER", "FLUX"))
         elif self.spec.satisfies("logger=cpp_logger"):
-            entries.append(cmake_cache_option("DYAD_LOGGER", "CPP_LOGGER"))
+            entries.append(cmake_cache_string("DYAD_LOGGER", "CPP_LOGGER"))
         else:
-            entries.append(cmake_cache_option("DYAD_LOGGER", "NONE"))
+            entries.append(cmake_cache_string("DYAD_LOGGER", "NONE"))
 
         if self.spec.satisfies("log_level=debug"):
-            entries.append(cmake_cache_option("DYAD_LOGGER_LEVEL", "DEBUG"))
+            entries.append(cmake_cache_string("DYAD_LOGGER_LEVEL", "DEBUG"))
         elif self.spec.satisfies("log_level=info"):
-            entries.append(cmake_cache_option("DYAD_LOGGER_LEVEL", "INFO"))
+            entries.append(cmake_cache_string("DYAD_LOGGER_LEVEL", "INFO"))
         elif self.spec.satisfies("log_level=warn"):
-            entries.append(cmake_cache_option("DYAD_LOGGER_LEVEL", "WARN"))
+            entries.append(cmake_cache_string("DYAD_LOGGER_LEVEL", "WARN"))
         elif self.spec.satisfies("log_level=error"):
-            entries.append(cmake_cache_option("DYAD_LOGGER_LEVEL", "ERROR"))
+            entries.append(cmake_cache_string("DYAD_LOGGER_LEVEL", "ERROR"))
         else:
-            entries.append(cmake_cache_option("DYAD_LOGGER_LEVEL", "NONE"))
+            entries.append(cmake_cache_string("DYAD_LOGGER_LEVEL", "NONE"))
 
         return entries
