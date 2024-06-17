@@ -30,7 +30,7 @@ class A4mdCore(CachedCMakePackage):
     
 
     def initconfig_package_entries(self):
-        entries = super(self, A4mdCore).initconfig_package_entries()
+        entries = super(A4mdCore, self).initconfig_package_entries()
         entries.append(cmake_cache_option("DTL_DYAD", self.spec.satisfies("+dyad")))
         entries.append(cmake_cache_option("DTL_DSPACES", self.spec.satisfies("+dspaces")))
         

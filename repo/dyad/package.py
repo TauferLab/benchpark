@@ -46,7 +46,7 @@ class Dyad(CachedCMakePackage, AutotoolsPackage):
     )
     
     def initconfig_package_entries(self):
-        entries = super(self, Dyad).initconfig_package_entries()
+        entries = super(Dyad, self).initconfig_package_entries()
         entries.append(cmake_cache_option("DYAD_ENABLE_UCX_DATA", self.spec.satisfies("+ucx_tag")))
         entries.append(cmake_cache_option("DYAD_ENABLE_UCX_DATA_RMA", self.spec.satisfies("+ucx_rma")))
 
