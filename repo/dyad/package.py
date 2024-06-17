@@ -4,7 +4,7 @@ from spack import *
 class Dyad(CachedCMakePackage, AutotoolsPackage):
 
     homepage = "https://dyad.readthedocs.io"
-    git      = "https://github.com/flux-framework/dyad"
+    git      = "https://github.com/flux-framework/dyad.git"
 
     # TODO add new version once we pin the post-HiCOMB/SC version of DYAD
     version("main", branch="main")
@@ -20,12 +20,12 @@ class Dyad(CachedCMakePackage, AutotoolsPackage):
     
     depends_on("pkg-config", type="build")
     depends_on("flux-core", type=("build", "link", "run"))
-    depends_on("jansson@2.10:", type=("build", "link", "run"))
-    depends_on("cpp-logger", when="logger=cpp_logger", type=("build", "link", "run"))
-    depends_on("py-dlio-profiler-py", when="+dftracer",  type=("build", "link", "run"))
-    depends_on("caliper", when="+caliper", type=("build", "link", "run"))
-    depends_on("ucx@1.6:", when="+ucx_tag", type=("build", "link", "run"))
-    depends_on("ucx@1.6:", when="+ucx_rma", type=("build", "link", "run"))
+    depends_on("jansson@2.10:", type="link")
+    depends_on("cpp-logger", when="logger=cpp_logger", type="link")
+    depends_on("py-dlio-profiler-py", when="+dftracer",  type="link")
+    depends_on("caliper", when="+caliper", type="link")
+    depends_on("ucx@1.6:", when="+ucx_tag", type="link")
+    depends_on("ucx@1.6:", when="+ucx_rma", type="link")
 
     with when("build_system=autotools"):
         depends_on("autoconf", type="build")
