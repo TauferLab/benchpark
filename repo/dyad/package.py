@@ -40,6 +40,7 @@ class Dyad(CachedCMakePackage, AutotoolsPackage):
     
     build_system(
         # conditional("cmake", when="@0.2.0:"),
+        conditional("cmake", when="@main"),
         conditional("autotools", when="@:0.1.1"),
         default="cmake"
     )
