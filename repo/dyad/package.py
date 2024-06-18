@@ -18,7 +18,10 @@ class Dyad(CachedCMakePackage, AutotoolsPackage):
     variant("logger", default="none", values=("flux", "cpp_logger", "none"))  # DYAD_LOGGER
     variant("log_level", default="none", values=("debug", "info", "warn", "error", "none"))  # DYAD_LOGGER_LEVEL
     
-    depends_on("pkg-config", type="build")
+    # Note: pkgconfig is a virtual package (similar to mpi) that is implemented by pkg-config
+    depends_on("pkgconfig", type="build")
+    # Flux is needed as a build dependency because 'FindFluxCore.cmake' looks for the
+    # 'flux' executable
     depends_on("flux-core", type=("build", "link", "run"))
     depends_on("jansson@2.10:", type="link")
     depends_on("cpp-logger", when="logger=cpp_logger", type="link")
