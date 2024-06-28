@@ -12,10 +12,10 @@ class A4mdCore(CachedCMakePackage):
     
     variant("log_level", default="none",
             values=["none", "trace", "debug", "info", "warn", "error", "critical"])
+    # TODO add dspaces to "values" once we get the DSpaces Plugin working
+    variant("plugins", default="mpi,filesystem", values=("mpi", "filesystem", "dyad"), multi=True)
+    variant("serializers", default="nlohmann", values=("nlohmann", "none"), multi=True)
     variant("caliper", default=False)
-    variant("dyad", default=False)
-    # TODO: uncomment once we get DSpaces working
-    # variant("+dspaces", default=False)
     
     depends_on("mpi", type=("build", "link"))
     depends_on("nlohmann-json", type="link")
@@ -23,7 +23,7 @@ class A4mdCore(CachedCMakePackage):
     depends_on("spdlog", type="link")
     
     # TODO: change to specific minimum version once next release of DYAD is pinned
-    depends_on("dyad@main", when="+dyad", type=("link", "run"))
+    depends_on("dyad@main", when="plugins=dyad", type=("link", "run"))
     # TODO: uncomment once we get DSpaces working
     # depends_on("dspaces@2.2", when="+dspaces")
     depends_on("caliper", when="+caliper", type="link")
@@ -31,14 +31,14 @@ class A4mdCore(CachedCMakePackage):
 
     def initconfig_package_entries(self):
         entries = super(A4mdCore, self).initconfig_package_entries()
-        entries.append(cmake_cache_option("DTL_DYAD", self.spec.satisfies("+dyad")))
-        entries.append(cmake_cache_option("DTL_DSPACES", self.spec.satisfies("+dspaces")))
+        entries.append(cmake_cache_option("WITH_MPI_DTL", self.spec.satisfies("plugins=mpi")))
+        entries.append(cmake_cache_option("WITH_FS_DTL", self.spec.satisfies("plugins=filesystem")))
+        entries.append(cmake_cache_option("WITH_DYAD_DTL", self.spec.satisfies("plugins=dyad")))
+        
+        entries.append(cmake_cache_option("WITH_NLOHMANN_SERIALIZATION", self.spec.satisfies("serializers=nlohmann")))
         
         if self.spec.satisfies("+caliper"):
-            entries.append(cmake_cache_option("ENABLE_PERF", True))
-            entries.append(cmake_cache_string("A4MD_PERF_PLUGIN", "CALIPER"))
-        else:
-            entries.append(cmake_cache_option("ENABLE_PERF", False))
+            entries.append(cmake_cache_string("A4MD_PROFILER", "CALIPER"))
             
         if self.spec.satisfies("log_level=critical"):
             entries.append(cmake_cache_string("A4MD_LOG_LEVEL", "CRITICAL"))
