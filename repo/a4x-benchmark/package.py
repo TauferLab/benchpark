@@ -1,10 +1,10 @@
 from spack import *
 
 
-class A4mdBenchmark(CachedCMakePackage):
+class A4xBenchmark(CachedCMakePackage):
     
     homepage = "https://analytics4md.org/"
-    git      = "git@github.com:Analytics4MD/a4md-benchmark.git"
+    git      = "git@github.com:Analytics4MD/a4x-benchmark.git"
     
     version("main", branch="main")
     

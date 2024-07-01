@@ -1,11 +1,11 @@
 from spack import *
 
 
-class A4mdCore(CachedCMakePackage):
+class A4xCore(CachedCMakePackage):
 
     homepage = "https://analytics4md.org/"
     # TODO: change to HTTPS URL once repo is public
-    git      = "git@github.com:Analytics4MD/a4md-core.git"
+    git      = "git@github.com:Analytics4MD/a4x-core.git"
     
     # Note: may require enabling submodules in future (e.g., once Cereal is working)
     version("main", branch="main")
