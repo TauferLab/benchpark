@@ -30,7 +30,7 @@ class A4xCore(CachedCMakePackage):
     
 
     def initconfig_package_entries(self):
-        entries = super(A4mdCore, self).initconfig_package_entries()
+        entries = super(A4xCore, self).initconfig_package_entries()
         entries.append(cmake_cache_option("WITH_MPI_DTL", self.spec.satisfies("plugins=mpi")))
         entries.append(cmake_cache_option("WITH_FS_DTL", self.spec.satisfies("plugins=filesystem")))
         entries.append(cmake_cache_option("WITH_DYAD_DTL", self.spec.satisfies("plugins=dyad")))
