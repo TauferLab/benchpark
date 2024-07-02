@@ -15,13 +15,13 @@ class A4xBenchmark(CachedCMakePackage):
     depends_on("mpi", type=("build", "link"))
     depends_on("nlohmann-json", type="link")
     depends_on("fmt", type="link")
-    depends_on("a4md-core@main", type="link")
-    depends_on("a4md-orchestration@main", type="link")
+    depends_on("a4x-core@main", type="link")
+    depends_on("a4x-orchestration@main", type="link")
 
-    depends_on("a4md-core +caliper", when="+caliper")
+    depends_on("a4x-core +caliper", when="+caliper")
     
     # Use a for loop here since there's currently no way to easily propagate
     # a4md-benchmark's core_plugins variant to a4md-core's plugins variant
     for cpv in core_plugins_values:
-        depends_on("a4md-core plugins={}".format(cpv), when="core_plugins={}".format(cpv))
+        depends_on("a4x-core plugins={}".format(cpv), when="core_plugins={}".format(cpv))
     
