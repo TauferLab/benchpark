@@ -6,9 +6,12 @@ class A4xCore(CachedCMakePackage):
     homepage = "https://analytics4md.org/"
     # TODO: change to HTTPS URL once repo is public
     git      = "git@github.com:Analytics4MD/a4x-core.git"
+
+    maintainers("ilumsden")
     
     # Note: may require enabling submodules in future (e.g., once Cereal is working)
     version("main", branch="main")
+    version("0.1.0", tag="v0.1.0")
     
     variant("log_level", default="none",
             values=["none", "trace", "debug", "info", "warn", "error", "critical"])
