@@ -5,8 +5,11 @@ class A4xBenchmark(CachedCMakePackage):
     
     homepage = "https://analytics4md.org/"
     git      = "git@github.com:Analytics4MD/a4x-benchmark.git"
+
+    maintainers("ilumsden")
     
     version("main", branch="main")
+    version("0.1.0", tag="v0.1.0")
     
     core_plugins_values = ("mpi", "filesystem", "dyad")
     variant("core_plugins", default="mpi,filesystem", values=core_plugins_values, multi=True)
