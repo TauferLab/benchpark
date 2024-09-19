@@ -26,7 +26,7 @@ class A4xBenchmark(CachedCMakePackage):
     depends_on("caliper", when="@summary_print", type=("build", "link", "run"))
     depends_on("adiak", when="@summary_print", type="link")
 
-    depends_on("a4x-core +caliper", when="@+caliper")
+    depends_on("a4x-core +caliper", when="+caliper")
     
     # Use a for loop here since there's currently no way to easily propagate
     # a4md-benchmark's core_plugins variant to a4md-core's plugins variant
