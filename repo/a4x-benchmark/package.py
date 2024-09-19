@@ -22,6 +22,7 @@ class A4xBenchmark(CachedCMakePackage):
     depends_on("fmt", type="link")
     depends_on("a4x-core", type="link")
     depends_on("a4x-orchestration", type="link")
+    depends_on("a4x-orchestration@explicit_sync_hooks", when="@summary_print", type="link")
     depends_on("caliper", when="@summary_print", type=("build", "link", "run"))
     depends_on("adiak", when="@summary_print", type="link")
 
