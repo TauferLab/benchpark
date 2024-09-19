@@ -4,10 +4,13 @@ from spack import *
 class Dyad(CachedCMakePackage, AutotoolsPackage):
 
     homepage = "https://dyad.readthedocs.io"
-    git      = "https://github.com/flux-framework/dyad.git"
+    # git      = "https://github.com/flux-framework/dyad.git"
+    git      = "https://github.com/TauferLab/dyad"
 
     # TODO add new version once we pin the post-HiCOMB/SC version of DYAD
     version("main", branch="main")
+    version("cmake_export", branch="cmake_export")
+    version("exported_core", branch="exported_core")
     version("0.1.1", tag="v0.1.1", deprecated=True)
     version("0.1.0", tag="v0.1.0", deprecated=True)
     
@@ -43,7 +46,7 @@ class Dyad(CachedCMakePackage, AutotoolsPackage):
     
     build_system(
         # conditional("cmake", when="@0.2.0:"),
-        conditional("cmake", when="@main"),
+        conditional("cmake", when="@cmake_export:main"),
         conditional("autotools", when="@:0.1.1"),
         default="cmake"
     )

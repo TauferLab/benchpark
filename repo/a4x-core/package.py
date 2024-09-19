@@ -11,6 +11,9 @@ class A4xCore(CachedCMakePackage):
     
     # Note: may require enabling submodules in future (e.g., once Cereal is working)
     version("main", branch="main")
+    version("caliper_perf", branch="caliper_perf")
+    version("expanded_perf", branch="expanded_perf")
+    version("dyad_client_api", branch="dyad_client_api")
     version("0.1.0", tag="v0.1.0")
     
     variant("log_level", default="none",
@@ -26,7 +29,8 @@ class A4xCore(CachedCMakePackage):
     depends_on("spdlog", type="link")
     
     # TODO: change to specific minimum version once next release of DYAD is pinned
-    depends_on("dyad@main", when="plugins=dyad", type=("link", "run"))
+    depends_on("dyad", when="plugins=dyad", type=("link", "run"))
+    depends_on("dyad@exported_core", when="@dyad_client_api plugins=dyad", type=("link", "run"))
     # TODO: uncomment once we get DSpaces working
     # depends_on("dspaces@2.2", when="+dspaces")
     depends_on("caliper", when="+caliper", type="link")
@@ -41,7 +45,10 @@ class A4xCore(CachedCMakePackage):
         entries.append(cmake_cache_option("WITH_NLOHMANN_SERIALIZATION", self.spec.satisfies("serializers=nlohmann")))
         
         if self.spec.satisfies("+caliper"):
-            entries.append(cmake_cache_string("A4X_PROFILER", "CALIPER"))
+            if self.spec.satisfies("@=caliper_perf"):
+                entries.append(cmake_cache_option("WITH_PERF_ANNOTATIONS", True))
+            else:
+                entries.append(cmake_cache_string("A4X_PROFILER", "CALIPER"))
             
         if self.spec.satisfies("log_level=critical"):
             entries.append(cmake_cache_string("A4X_LOG_LEVEL", "CRITICAL"))

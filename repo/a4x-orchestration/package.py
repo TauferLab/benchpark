@@ -10,6 +10,7 @@ class A4xOrchestration(CachedCMakePackage):
     maintainers("ilumsden")
     
     version("main", branch="main")
+    version("explicit_sync_hooks", branch="explicit_sync_hooks")
     version("0.1.0", tag="v0.1.0")
     
     depends_on("mpi", type=("build", "link"))
