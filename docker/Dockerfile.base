@@ -1,0 +1,38 @@
+FROM fluxrm/flux-sched:el9
+
+USER root
+
+ENV LOCAL_USER=jovyan \
+    LOCAL_UID=1001 \
+    HOME=/home/jovyan
+
+RUN dnf -y install \
+    shadow-utils && \
+    dnf clean all
+
+RUN adduser \
+    --comment "Default user" \
+    --uid ${LOCAL_UID} \
+    --home-dir ${HOME} \
+    --badname \
+    ${LOCAL_USER} && \
+    passwd -l ${LOCAL_USER}
+
+COPY --chown=${LOCAL_USER} ./ ${HOME}/benchpark
+
+RUN python3 -m pip install -r ${HOME}/benchpark/requirements.txt
+
+ENV SHELL=/usr/bin/bash
+ENV FLUX_URI_RESOLVE_LOCAL=t
+
+WORKDIR ${HOME}
+
+USER ${LOCAL_USER}
+
+RUN echo "export PATH=${HOME}/benchpark/bin:$PATH" >> ${HOME}/.bashrc
+
+RUN source ${HOME}/.bashrc && echo -n "Benchpark version: " && benchpark --version
+
+ENV NUM_NODES=1
+
+ENTRYPOINT flux start --test-size=${NUM_NODES}
