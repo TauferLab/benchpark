@@ -26,7 +26,7 @@ class Oci(System):
 
 
     def compiler_configs(self):
-        compilers = OCI.resource_location / "compilers"
+        compilers = Oci.resource_location / "compilers"
 
         selections = []
         selections.append(compilers / "gcc" / "00-gcc-11-compilers.yaml")
