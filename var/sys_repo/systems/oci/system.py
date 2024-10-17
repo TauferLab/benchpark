@@ -3,6 +3,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+import pathlib
+
 from benchpark.system import System
 from benchpark.directives import variant
 
