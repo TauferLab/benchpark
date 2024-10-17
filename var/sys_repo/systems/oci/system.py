@@ -14,7 +14,7 @@ class Oci(System):
         super().initialize()
         self.scheduler = "flux"
         # TODO: do we need to set attributes sys_cores_per_node and/or sys_mem_per_node?
-
+        self.sys_cores_per_node = 10
 
     def generate_description(self, output_dir):
         super().generate_description(output_dir)
