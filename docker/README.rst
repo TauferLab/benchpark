@@ -27,3 +27,14 @@ You can run the base OCI/Docker image for Benchpark with the following command:
 .. code-block:: bash
 
     docker run --rm -it --name benchpark_base benchpark_base
+
+Initialize the Benchpark System
+--------------
+
+To initialize the system for the OCI/Docker container run:
+
+.. code-block:: bash
+
+    cd benchpark
+    ./bin/benchpark system init --dest=oci-system oci
+

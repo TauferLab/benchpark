@@ -7,7 +7,7 @@ from benchpark.system import System
 from benchpark.directives import variant
 
 
-class OCI(System):
+class Oci(System):
 
 
     def initialize(self):
