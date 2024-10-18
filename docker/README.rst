@@ -38,3 +38,12 @@ To initialize the system for the OCI/Docker container run:
     cd benchpark
     ./bin/benchpark system init --dest=oci-system oci
 
+Initialize/Setup a Single Node Experiment
+--------------
+
+.. code-block:: bash
+    
+    ./bin/benchpark experiment init --dest=kripke_test kripke
+    ./bin/benchpark setup kripke_test oci-system workspace/
+
+Follow the rest of the commands prompted to run the experiment.
