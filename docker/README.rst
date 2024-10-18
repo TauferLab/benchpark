@@ -28,6 +28,12 @@ You can run the base OCI/Docker image for Benchpark with the following command:
 
     docker run --rm -it --name benchpark_base benchpark_base
 
+.. note::
+
+    If you want to run with multiple "nodes", pass :code:`-e NUM_NODES=<Number>`
+    to the :code:`docker run` coammnd above. This will use Flux's
+    :code:`--test-size` flag to create the appearance of multiple nodes.
+
 Initialize the Benchpark System
 --------------
 
