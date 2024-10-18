@@ -9,6 +9,8 @@ Local Usage
 
 This section assumes that you are not using the registry image (not yet created).
 
+It also assumes that you have docker installed on your system.
+
 Build Base Image
 ----------------
 
