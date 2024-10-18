@@ -1,0 +1,7 @@
+#!/bin/bash
+
+benchpark system init --dest=oci-system oci
+
+benchpark experiment init --dest={{ benchmark_name }} {{ benchmark_name }}
+
+benchpark setup {{ benchmark_name }} oci-system {{ benchmark_name }}_workspace/
