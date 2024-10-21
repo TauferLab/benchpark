@@ -33,6 +33,4 @@ RUN echo "export PATH=${HOME}/benchpark/bin:$PATH" >> ${HOME}/.bashrc
 
 RUN source ${HOME}/.bashrc && echo -n "Benchpark version: " && benchpark --version
 
-ENV NUM_NODES=1
-
-ENTRYPOINT flux start --test-size=${NUM_NODES}
+ENTRYPOINT ${SHELL}
