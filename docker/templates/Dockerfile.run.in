@@ -37,7 +37,4 @@ RUN source ${HOME}/.bashrc && echo -n "Benchpark version: " && benchpark --versi
 
 RUN source ${HOME}/.bashrc && ${HOME}/{{ setup_script_name }}
 
-ENV NUM_NODES=1
-
-ENTRYPOINT flux start --test-size=${NUM_NODES}
-CMD ${HOME}/{{ run_script_name }}
+ENTRYPOINT ${SHELL} ${HOME}/{{ run_script_name }}
