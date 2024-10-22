@@ -14,7 +14,7 @@ class Oci(System):
 
     def initialize(self):
         super().initialize()
-        self.scheduler = "flux"
+        self.scheduler = "mpi"
         # TODO: do we need to set attributes sys_cores_per_node and/or sys_mem_per_node?
         self.sys_cores_per_node = 10
 
@@ -25,16 +25,6 @@ class Oci(System):
 
         with open(sw_description, "w") as f:
             f.write(self.sw_description())
-
-
-    def compiler_configs(self):
-        compilers = Oci.resource_location / "compilers"
-
-        selections = []
-        selections.append(compilers / "gcc" / "00-gcc-11-compilers.yaml")
-
-        return selections
-
 
     def sw_description(self):
         """This is somewhat vestigial, and maybe deleted later. The experiments
