@@ -41,25 +41,6 @@ valid_mpi_types_and_specs = {
 }
 
 
-def list_os():
-    print("The following operating systems can be used in Benchpark containers:")
-    print(" ".join(valid_container_oses_and_pkgs.keys()))
-
-
-def list_mpi():
-    print("The following types of MPI can be used in Benchpark containers:")
-    print(" ".join(valid_mpi_types_and_specs.keys()))
-
-
-def list_mpi_specs(mpi_type):
-    print(
-        "The following specs will be installed for {} in the Benchpark container:".format(
-            mpi_type
-        )
-    )
-    print("\n".join(valid_mpi_types_and_specs[mpi_type]))
-
-
 def populate_templating_dict(args):
     template_dict = {
         "mpi": {
@@ -122,6 +103,62 @@ class ExtraLabelAction(argparse.Action):
         setattr(args, self.dest, d)
 
 
+class ListOsAction(argparse.Action):
+    def __init__(self, option_strings, dest, **kwargs):
+        local_kwargs = kwargs.copy()
+        for reserved in ["nargs", "default"]:
+            if reserved in kwargs:
+                del local_kwargs[reserved]
+        return super().__init__(
+            option_strings, dest, nargs=0, default=argparse.SUPPRESS, **local_kwargs
+        )
+
+    def __call__(self, parser, args, values, option_string=None):
+        print("The following operating systems can be used in Benchpark containers:")
+        print(" ".join(valid_container_oses_and_pkgs.keys()))
+        parser.exit()
+
+
+class ListMpiAction(argparse.Action):
+    def __init__(self, option_strings, dest, **kwargs):
+        local_kwargs = kwargs.copy()
+        for reserved in ["nargs", "default"]:
+            if reserved in kwargs:
+                del local_kwargs[reserved]
+        return super().__init__(
+            option_strings, dest, nargs=0, default=argparse.SUPPRESS, **local_kwargs
+        )
+
+    def __call__(self, parser, args, values, option_string=None):
+        print("The following types of MPI can be used in Benchpark containers:")
+        print(" ".join(valid_mpi_types_and_specs.keys()))
+        parser.exit()
+
+
+class ListMpiSpecsAction(argparse.Action):
+    def __init__(self, option_strings, dest, **kwargs):
+        local_kwargs = kwargs.copy()
+        for reserved in ["nargs", "default", "type"]:
+            if reserved in kwargs:
+                del local_kwargs[reserved]
+        return super().__init__(
+            option_strings, dest, nargs=1, default="", type=str, **local_kwargs
+        )
+
+    def __call__(self, parser, args, values, option_string=None):
+        if values[0] not in valid_mpi_types_and_specs.keys():
+            raise ValueError("Unrecognized MPI type: {}".format(values[0]))
+        print(
+            "The following specs will be installed for {} in the Benchpark container:".format(
+                values[0]
+            )
+        )
+        print(
+            "\n".join(["  {}".format(s) for s in valid_mpi_types_and_specs[values[0]]])
+        )
+        parser.exit()
+
+
 def setup_parser(root_parser):
     root_parser.add_argument(
         "container_os",
@@ -172,35 +209,22 @@ def setup_parser(root_parser):
     )
     root_parser.add_argument(
         "--list_os",
-        action="store_true",
-        default=False,
+        action=ListOsAction,
         help="If provided, list the available operating systems",
     )
     root_parser.add_argument(
         "--list_mpi",
-        action="store_true",
-        default=False,
+        action=ListMpiAction,
         help="If provided, list the available types of MPI",
     )
     root_parser.add_argument(
         "--list_mpi_specs",
-        type=str,
-        nargs=1,
-        default=None,
+        action=ListMpiSpecsAction,
         help="If provided, list the available Spack specs that will be installed for the specified MPI",
     )
 
 
 def command(args):
-    if args.list_os:
-        list_os()
-        return
-    if args.list_mpi:
-        list_mpi()
-        return
-    if args.list_mpi_specs is not None:
-        list_mpi_specs(args.list_mpi_specs)
-        return
     template_dict = populate_templating_dict(args)
     with tempfile.TemporaryDirectory() as tmp_dir:
         tmp_path = Path(tmp_dir).resolve()
