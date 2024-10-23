@@ -26,3 +26,6 @@ spack:
     labels:
       app: benchpark
       mpi: {{ mpi.name }}
+      {%- for label in extra_labels %}
+      {{ label }}
+      {%- endfor %}

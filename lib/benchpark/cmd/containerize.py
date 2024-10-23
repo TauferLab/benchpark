@@ -5,6 +5,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+import argparse
 import importlib
 import os
 from pathlib import Path
@@ -57,6 +58,10 @@ def populate_templating_dict(args):
             "os_packages": valid_container_oses_and_pkgs[args.container_os],
         },
     }
+    if args.extra_labels is not None:
+        template_dict["extra_labels"] = [
+            "{}: {}".format(k, v) for k, v in args.extra_labels.items()
+        ]
     return template_dict
 
 
@@ -79,16 +84,23 @@ def generate_container_definition(tmp_path):
         text=True,
         encoding="utf-8",
     )
-    # cwd = Path.cwd()
-    # os.chdir(str(tmp_path))
-    # try:
-    #     # config = spack_container_module.validate(str(tmp_path / "spack.yaml"))
-    #     # recipe = spack_container_module.recipe(config)
-    #     config = spack.container.validate(str(tmp_path / "spack.yaml"))
-    #     recipe = spack.container.recipe(config)
-    # finally:
-    #     os.chdir(str(cwd))
     return recipe
+
+
+class ExtraLabelAction(argparse.Action):
+    def _parse_single(self, val):
+        return val.split("=", 2)
+
+    def __call__(self, parser, args, values, option_string=None):
+        d = getattr(args, self.dest) or {}
+        if isinstance(values, str):
+            k, v = self._parse_single(values)
+            d[k] = v
+        else:
+            for val in values:
+                k, v = self._parse_single(val)
+                d[k] = v
+        setattr(args, self.dest, d)
 
 
 def setup_parser(root_parser):
@@ -129,6 +141,15 @@ def setup_parser(root_parser):
         action="store_true",
         default=False,
         help="If provided, print the generated spack.yaml file to stdout",
+    )
+    root_parser.add_argument(
+        "--extra_labels",
+        "-l",
+        metavar="KEY=VALUE",
+        type=str,
+        nargs="+",
+        action=ExtraLabelAction,
+        help="Add extra labels to the container definition",
     )
 
 
