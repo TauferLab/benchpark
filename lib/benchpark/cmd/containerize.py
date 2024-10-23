@@ -6,12 +6,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import argparse
-import importlib
-import os
 from pathlib import Path
-import shutil
 import subprocess
-import sys
 import tempfile
 
 from jinja2 import Template
