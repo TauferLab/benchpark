@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+
+from pathlib import Path
+import subprocess
+import shutil
+
+base_dir = Path(__file__).parent.resolve()
+
+dump_dir = base_dir / "dockerfiles"
+
+if dump_dir.is_dir():
+    shutil.rmtree(str(dump_dir))
+
+dump_dir.mkdir(parents=True)
+
+benchpark = base_dir / "bin" / "benchpark"
+
+oses = [
+    "rockylinux:9",
+    "rockylinux:8",
+    "almalinux:9",
+    "almalinux:8",
+    "fedora:39",
+    "fedora:40",
+    "ubuntu:20.04",
+    "ubuntu:22.04",
+    "ubuntu:24.04",
+]
+
+mpis = [
+    "openmpi",
+    "mpich",
+    "mpich_pmi",
+    "mpich_pmi2",
+    "mpich_pmix",
+    "mpich_pmicray",
+    "mvapich2",
+    "mvapich2_pmi",
+    "mvapich2_pmi2",
+    "mvapich2_pmix",
+]
+
+for os in oses:
+    for mpi in mpis:
+        dockerfile = dump_dir / "{}_{}.dockerfile".format("_".join(os.split(":")), mpi)
+        subprocess.check_call(
+            f"{benchpark} containerize {os} {mpi} -o {dockerfile}",
+            shell=True,
+        )
+
+print(f"Generated Dockerfiles are in {dump_dir}")

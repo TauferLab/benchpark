@@ -31,9 +31,106 @@ valid_container_oses_and_pkgs = {
         "vim",
         "shadow-utils",
     ],
+    # Note: not yet tested
+    "rockylinux:8": [
+        "git",
+        "python39-devel",
+        "python39-pip",
+        "vim",
+        "shadow-utils",
+    ],
+    # Note: not yet tested
+    "almalinux:9": [
+        "git",
+        "python3-devel",
+        "python3-pip",
+        "vim",
+        "shadow-utils",
+    ],
+    # Note: not yet tested
+    "almalinux:8": [
+        "git",
+        "python39-devel",
+        "python39-pip",
+        "vim",
+        "shadow-utils",
+    ],
+    # Note: not yet tested
+    "fedora:39": [
+        "git",
+        "python3-devel",
+        "python3-pip",
+        "vim",
+        "shadow-utils",
+    ],
+    # Note: not yet tested
+    "fedora:40": [
+        "git",
+        "python3-devel",
+        "python3-pip",
+        "vim",
+        "shadow-utils",
+    ],
+    # Note: not yet tested
+    "ubuntu:20.04": [
+        "git",
+        "python3-dev",
+        "python3-pip",
+        "vim",
+        "adduser",
+    ],
+    # Note: not yet tested
+    "ubuntu:22.04": [
+        "git",
+        "python3-dev",
+        "python3-pip",
+        "vim",
+        "adduser",
+    ],
+    # Note: not yet tested
+    "ubuntu:24.04": [
+        "git",
+        "python3-dev",
+        "python3-pip",
+        "vim",
+        "adduser",
+    ],
 }
 valid_mpi_types_and_specs = {
     "openmpi": ["openmpi@4.1.5 fabrics=ofi", "libfabric fabrics=sockets,tcp,udp,verbs"],
+    "mpich": ["mpich@4.2.2 netmod=ofi", "libfabric fabrics=sockets,tcp,udp,verbs"],
+    "mpich_pmi": [
+        "mpich@4.2.2 pmi=pmi netmod=ofi",
+        "libfabric fabrics=sockets,tcp,udp,verbs",
+    ],
+    "mpich_pmi2": [
+        "mpich@4.2.2 pmi=pmi2 netmod=ofi",
+        "libfabric fabrics=sockets,tcp,udp,verbs",
+    ],
+    "mpich_pmix": [
+        "mpich@4.2.2 pmi=pmix netmod=ofi",
+        "libfabric fabrics=sockets,tcp,udp,verbs",
+    ],
+    "mpich_pmicray": [
+        "mpich@4.2.2 pmi=cray netmod=ofi ~hydra",
+        "libfabric fabrics=sockets,tcp,udp,verbs",
+    ],
+    "mvapich2": [
+        "mvapich2@2.3.7 fabrics=nemisisofi",
+        "libfabric fabrics=sockets,tcp,udp,verbs",
+    ],
+    "mvapich2_pmi": [
+        "mvapich2@2.3.7 pmi_version=pmi1 fabrics=nemisisofi",
+        "libfabric fabrics=sockets,tcp,udp,verbs",
+    ],
+    "mvapich2_pmi2": [
+        "mvapich2@2.3.7 pmi_version=pmi2 fabrics=nemisisofi",
+        "libfabric fabrics=sockets,tcp,udp,verbs",
+    ],
+    "mvapich2_pmix": [
+        "mvapich2@2.3.7 pmi_version=pmix fabrics=nemisisofi",
+        "libfabric fabrics=sockets,tcp,udp,verbs",
+    ],
 }
 
 
@@ -229,7 +326,6 @@ def command(args):
                 "Python's 'tempfile' module didn't correctly create a temporary directory"
             )
         generate_spack_env(template_dict, tmp_path)
-        dockerfile_contents = generate_container_definition(tmp_path)
         if args.print_spack_yaml:
             print(
                 "Container definition was generated from the following spack.yaml:",
@@ -237,6 +333,7 @@ def command(args):
             )
             with open(str(tmp_path / "spack.yaml"), "r") as f:
                 print(f.read(), end="\n\n")
+        dockerfile_contents = generate_container_definition(tmp_path)
     if args.output is None:
         print("Benchpark generated the following container definition:", end="\n\n")
         print(dockerfile_contents)
