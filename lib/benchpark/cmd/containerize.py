@@ -41,6 +41,25 @@ valid_mpi_types_and_specs = {
 }
 
 
+def list_os():
+    print("The following operating systems can be used in Benchpark containers:")
+    print(" ".join(valid_container_oses_and_pkgs.keys()))
+
+
+def list_mpi():
+    print("The following types of MPI can be used in Benchpark containers:")
+    print(" ".join(valid_mpi_types_and_specs.keys()))
+
+
+def list_mpi_specs(mpi_type):
+    print(
+        "The following specs will be installed for {} in the Benchpark container:".format(
+            mpi_type
+        )
+    )
+    print("\n".join(valid_mpi_types_and_specs[mpi_type]))
+
+
 def populate_templating_dict(args):
     template_dict = {
         "mpi": {
@@ -151,9 +170,37 @@ def setup_parser(root_parser):
         action=ExtraLabelAction,
         help="Add extra labels to the container definition",
     )
+    root_parser.add_argument(
+        "--list_os",
+        action="store_true",
+        default=False,
+        help="If provided, list the available operating systems",
+    )
+    root_parser.add_argument(
+        "--list_mpi",
+        action="store_true",
+        default=False,
+        help="If provided, list the available types of MPI",
+    )
+    root_parser.add_argument(
+        "--list_mpi_specs",
+        type=str,
+        nargs=1,
+        default=None,
+        help="If provided, list the available Spack specs that will be installed for the specified MPI",
+    )
 
 
 def command(args):
+    if args.list_os:
+        list_os()
+        return
+    if args.list_mpi:
+        list_mpi()
+        return
+    if args.list_mpi_specs is not None:
+        list_mpi_specs(args.list_mpi_specs)
+        return
     template_dict = populate_templating_dict(args)
     with tempfile.TemporaryDirectory() as tmp_dir:
         tmp_path = Path(tmp_dir).resolve()
