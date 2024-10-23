@@ -19,6 +19,7 @@ import benchpark.cmd.system
 import benchpark.cmd.experiment
 import benchpark.cmd.setup
 import benchpark.cmd.unit_test
+import benchpark.cmd.containerize
 import benchpark.paths
 from benchpark.accounting import (
     benchpark_experiments,
@@ -218,11 +219,18 @@ def init_commands(subparsers, actions_dict):
     )
     benchpark.cmd.audit.setup_parser(audit_parser)
 
+    containerize_parser = subparsers.add_parser(
+        "containerize",
+        help="Generate OCI or Apptainer definition for running Benchpark",
+    )
+    benchpark.cmd.containerize.setup_parser(containerize_parser)
+
     actions_dict["system"] = benchpark.cmd.system.command
     actions_dict["experiment"] = benchpark.cmd.experiment.command
     actions_dict["setup"] = benchpark.cmd.setup.command
     actions_dict["unit-test"] = benchpark.cmd.unit_test.command
     actions_dict["audit"] = benchpark.cmd.audit.command
+    actions_dict["containerize"] = benchpark.cmd.containerize.command
 
 
 def run_command(command_str, env=None):

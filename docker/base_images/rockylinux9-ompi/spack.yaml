@@ -1,0 +1,29 @@
+spack:
+  specs:
+  - openmpi@4.1.5 fabrics=ofi
+  - libfabric fabrics=sockets,tcp,udp,verbs
+  concretizer:
+    unify: true
+  packages:
+    all:
+      compiler: [ gcc ]
+  config:
+    template_dirs:
+    - /Users/ilumsden/llnl/projects/pave/benchpark/docker/base_images/rockylinux9-ompi/templates
+  container:
+    format: docker
+    template: container/CustomDockerfile
+    images:
+      os: rockylinux:9
+      spack: 0.22.2
+    strip: true
+    os_packages:
+      final:
+      - git
+      - python3-devel
+      - python3-pip
+      - vim
+      - shadow-utils
+    labels:
+      app: benchpark
+      mpi: openmpi

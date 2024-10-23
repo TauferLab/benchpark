@@ -1,0 +1,28 @@
+spack:
+  specs:
+  {%- for spec in mpi.specs %}
+  - {{ spec }}
+  {%- endfor %}
+  concretizer:
+    unify: true
+  packages:
+    all:
+      compiler: [ gcc ]
+  config:
+    template_dirs:
+    - {{ container.template_dir }}
+  container:
+    format: docker
+    template: "{{ container.template }}"
+    images:
+      os: {{ container.os }}
+      spack: {{ container.spack_version }}
+    strip: {{ container.strip }}
+    os_packages:
+      final:
+      {%- for pkg in container.os_packages %}
+      - {{ pkg }}
+      {%- endfor %}
+    labels:
+      app: benchpark
+      mpi: {{ mpi.name }}
