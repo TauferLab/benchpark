@@ -21,6 +21,15 @@ command. Note that this command must be run from the root directory of Benchpark
 
     docker build -t benchpark_base -f ./docker/Dockerfile.base .
 
+Build Base Image
+----------------
+
+Check the list of images to confirm the new images has been created
+
+.. code-block:: bash
+
+    docker images 
+
 Run Base Image
 --------------
 
