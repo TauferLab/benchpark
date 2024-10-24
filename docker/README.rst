@@ -64,4 +64,4 @@ Initialize/Setup a Single Node Experiment
     benchpark experiment init --dest=kripke_test kripke
     benchpark setup kripke_test oci-system workspace/
 
-Follow the rest of the commands prompted to run the experiment.
+This comand will list a set of addional commands tailored for your image. Execute the prompted commands to run an experiment.
