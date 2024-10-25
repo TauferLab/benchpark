@@ -30,14 +30,14 @@ oses = [
 mpis = [
     "openmpi",
     "mpich",
-    "mpich_pmi",
-    "mpich_pmi2",
-    "mpich_pmix",
-    "mpich_pmicray",
+    # "mpich_pmi",
+    # "mpich_pmi2",
+    # "mpich_pmix",
+    # "mpich_pmicray",
     "mvapich2",
-    "mvapich2_pmi",
-    "mvapich2_pmi2",
-    "mvapich2_pmix",
+    # "mvapich2_pmi",
+    # "mvapich2_pmi2",
+    # "mvapich2_pmix",
 ]
 
 for os in oses:

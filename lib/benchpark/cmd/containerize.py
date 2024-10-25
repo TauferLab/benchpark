@@ -99,38 +99,38 @@ valid_container_oses_and_pkgs = {
 valid_mpi_types_and_specs = {
     "openmpi": ["openmpi@4.1.5 fabrics=ofi", "libfabric fabrics=sockets,tcp,udp,verbs"],
     "mpich": ["mpich@4.2.2 netmod=ofi", "libfabric fabrics=sockets,tcp,udp,verbs"],
-    "mpich_pmi": [
-        "mpich@4.2.2 pmi=pmi netmod=ofi",
-        "libfabric fabrics=sockets,tcp,udp,verbs",
-    ],
-    "mpich_pmi2": [
-        "mpich@4.2.2 pmi=pmi2 netmod=ofi",
-        "libfabric fabrics=sockets,tcp,udp,verbs",
-    ],
-    "mpich_pmix": [
-        "mpich@4.2.2 pmi=pmix netmod=ofi",
-        "libfabric fabrics=sockets,tcp,udp,verbs",
-    ],
-    "mpich_pmicray": [
-        "mpich@4.2.2 pmi=cray netmod=ofi ~hydra",
-        "libfabric fabrics=sockets,tcp,udp,verbs",
-    ],
+    # "mpich_pmi": [
+    #     "mpich@4.2.2 pmi=pmi netmod=ofi",
+    #     "libfabric fabrics=sockets,tcp,udp,verbs",
+    # ],
+    # "mpich_pmi2": [
+    #     "mpich@4.2.2 pmi=pmi2 netmod=ofi",
+    #     "libfabric fabrics=sockets,tcp,udp,verbs",
+    # ],
+    # "mpich_pmix": [
+    #     "mpich@4.2.2 pmi=pmix netmod=ofi",
+    #     "libfabric fabrics=sockets,tcp,udp,verbs",
+    # ],
+    # "mpich_pmicray": [
+    #     "mpich@4.2.2 pmi=cray netmod=ofi ~hydra",
+    #     "libfabric fabrics=sockets,tcp,udp,verbs",
+    # ],
     "mvapich2": [
         "mvapich2@2.3.7 fabrics=nemisisofi",
         "libfabric fabrics=sockets,tcp,udp,verbs",
     ],
-    "mvapich2_pmi": [
-        "mvapich2@2.3.7 pmi_version=pmi1 fabrics=nemisisofi",
-        "libfabric fabrics=sockets,tcp,udp,verbs",
-    ],
-    "mvapich2_pmi2": [
-        "mvapich2@2.3.7 pmi_version=pmi2 fabrics=nemisisofi",
-        "libfabric fabrics=sockets,tcp,udp,verbs",
-    ],
-    "mvapich2_pmix": [
-        "mvapich2@2.3.7 pmi_version=pmix fabrics=nemisisofi",
-        "libfabric fabrics=sockets,tcp,udp,verbs",
-    ],
+    # "mvapich2_pmi": [
+    #     "mvapich2@2.3.7 pmi_version=pmi1 fabrics=nemisisofi",
+    #     "libfabric fabrics=sockets,tcp,udp,verbs",
+    # ],
+    # "mvapich2_pmi2": [
+    #     "mvapich2@2.3.7 pmi_version=pmi2 fabrics=nemisisofi",
+    #     "libfabric fabrics=sockets,tcp,udp,verbs",
+    # ],
+    # "mvapich2_pmix": [
+    #     "mvapich2@2.3.7 pmi_version=pmix fabrics=nemisisofi",
+    #     "libfabric fabrics=sockets,tcp,udp,verbs",
+    # ],
 }
 
 
@@ -169,6 +169,17 @@ def generate_spack_env(template_dict, tmp_path):
         f.write(template)
 
 
+def remove_last_entrypoint(dockerfile_contents):
+    dockerfile_lines = dockerfile_contents.split("\n")
+    line_idx = -1
+    for i in range(len(dockerfile_lines) - 1, -1, -1):
+        if dockerfile_lines[i].startswith("ENTRYPOINT"):
+            line_idx = i
+            break
+    del dockerfile_lines[line_idx]
+    return "\n".join(dockerfile_lines)
+
+
 def generate_container_definition(tmp_path):
     recipe = subprocess.check_output(
         f"source {bootstrapper.spack_location}/share/spack/setup-env.sh && spack env activate . && spack containerize",
@@ -177,7 +188,37 @@ def generate_container_definition(tmp_path):
         text=True,
         encoding="utf-8",
     )
-    return recipe
+    return remove_last_entrypoint(recipe)
+
+
+def print_next_steps(dockerfile_path=None):
+    if dockerfile_path is None:
+        print(
+            "To build and run the above container definition, first copy the text above into a file, or rerun 'benchpark containerize' with the --output flag",
+            end="\n\n",
+        )
+    else:
+        print("The container definition was written to {}".format(str(dockerfile_path)))
+        print(
+            "In the commands below, use a relative version of this path as 'path/to/dockerfile'",
+            end="\n\n",
+        )
+    print("To build the generated container definition, run the following command:")
+    print("  $ docker build -f <path/to/dockerfile> -t <image_name> <base>")
+    print("where...")
+    print(
+        "  * path/to/dockerfile is the path to the container definition relative to 'base'"
+    )
+    print("  * image_name is the name of the built image")
+    print(
+        "  * base is the directory to which 'path/to/dockerfile' is relative (usually just '.')",
+        end="\n\n",
+    )
+    print("To run the built image, run the following command:")
+    print("  $ docker run --rm -it --name <container_name> <image_name>")
+    print("where...")
+    print("  * container_name is the name of the launched container")
+    print("  * image_name is the name of the image created by 'docker build'")
 
 
 class ExtraLabelAction(argparse.Action):
@@ -334,9 +375,15 @@ def command(args):
             with open(str(tmp_path / "spack.yaml"), "r") as f:
                 print(f.read(), end="\n\n")
         dockerfile_contents = generate_container_definition(tmp_path)
+    dockerfile_path = (
+        args.output.expanduser().resolve() if args.output is not None else None
+    )
     if args.output is None:
-        print("Benchpark generated the following container definition:", end="\n\n")
+        if args.print_spack_yaml:
+            print("Benchpark generated the following container definition:", end="\n\n")
         print(dockerfile_contents)
+        print("\n")
     else:
-        with open(str(args.output.expanduser().resolve()), "w") as f:
+        with open(str(dockerfile_path), "w") as f:
             f.write(dockerfile_contents)
+    print_next_steps(dockerfile_path)
