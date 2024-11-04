@@ -61,7 +61,14 @@ Initialize/Setup a Single Node Experiment
 
 .. code-block:: bash
     
-    benchpark experiment init --dest=kripke_test kripke
+    benchpark experiment init --dest=kripke_test kripke single_node=oui openmp=oui
     benchpark setup kripke_test oci-system workspace/
 
-This comand will list a set of addional commands tailored for your image. Execute the prompted commands to run an experiment.
+This comand will list a set of addional commands that may differ slightly on your image, examples listed below. 
+Execute the prompted commands to run an experiment.
+
+.. code-block:: bash
+
+    . /home/jovyan/benchpark/workspace/setup.sh
+    ramble --disable-progress-bar --workspace-dir /home/jovyan/benchpark/workspace/kripke_test/Oci-ec4b246/workspace workspace setup
+    ramble --disable-progress-bar --workspace-dir /home/jovyan/benchpark/workspace/kripke_test/Oci-ec4b246/workspace on

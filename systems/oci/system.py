@@ -15,7 +15,6 @@ class Oci(System):
     def initialize(self):
         super().initialize()
         self.scheduler = "mpi"
-        # TODO: do we need to set attributes sys_cores_per_node and/or sys_mem_per_node?
         self.sys_cores_per_node = 10
 
     def generate_description(self, output_dir):
@@ -26,10 +25,21 @@ class Oci(System):
         with open(sw_description, "w") as f:
             f.write(self.sw_description())
 
+    def external_pkg_configs(self):
+        externals = Oci.resource_location / "externals"
+
+        compiler = "gcc"
+
+        selections = [externals / "base" / "00-packages.yaml"]
+
+        selections.append(externals / "mpi" / "00-gcc-packages.yaml")
+        
+        return selections
+
     def sw_description(self):
-        """This is somewhat vestigial, and maybe deleted later. The experiments
-        will fail if these variables are not defined though, so for now
-        they are still generated (but with more-generic values).
+        """The experiments will fail if these variables are not 
+        defined for ramble, so for now they are still generated 
+        (but with more-generic values).
         """
         return """\
 software:
