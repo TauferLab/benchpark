@@ -7,10 +7,10 @@ packages:
   tar:
     buildable: false
     externals:
-    - spec: tar
-      prefix: /opt/view/bin
+    - spec: tar@1.34
+      prefix: /opt/view
   hwloc:
     buildable: false
     externals:
-    - spec: hwloc
-      prefix: /opt/view/bin
+    - spec: hwloc-gather-topology@2.9.1
+      prefix: /opt/view
