@@ -1,8 +1,8 @@
-.. note::
+Requirements
+============
 
-    If running on an M series Mac, you should add :code:`--platform linux/arm64`
-    to all the Docker commands below. If you don't, you may experience odd errors and/or
-    performance degradation.
+* Python3.8+
+* Docker
 
 Local Usage
 ===========
@@ -15,20 +15,20 @@ Build Base Image
 ----------------
 
 You can build the base OCI/Docker image for Benchpark with the following
-command. Note that this command must be run from the root directory of Benchpark.
+commands. Note that this command must be run from the root directory of Benchpark.
+
+First git clone the repository (and checkout the correct branch).
+Activate a python 3.8+ environment.
 
 .. code-block:: bash
 
-    docker build -t benchpark_base -f ./docker/Dockerfile.base .
+    cd benchpark 
+    . setup-env.sh
 
-Build Base Image
-----------------
+    benchpark containerize rockylinux:9 openmpi -o benchpark.dockerfile
 
-Check the list of images to confirm the new images has been created
+    docker build -f benchpark.dockerfile -t benchpark_base .
 
-.. code-block:: bash
-
-    docker images 
 
 Run Base Image
 --------------
@@ -37,14 +37,8 @@ You can run the base OCI/Docker image for Benchpark with the following command:
 
 .. code-block:: bash
 
-    docker run --rm -it --name benchpark_base benchpark_base
+    docker run --rm -it --name benchpark_container benchpark_base
 
-..
-    .. note::
-
-        If you want to run with multiple "nodes", pass :code:`-e NUM_NODES=<Number>`
-        to the :code:`docker run` coammnd above. This will use Flux's
-        :code:`--test-size` flag to create the appearance of multiple nodes.
 
 Initialize the Benchpark System
 --------------
@@ -61,8 +55,8 @@ Initialize/Setup a Single Node Experiment
 
 .. code-block:: bash
     
-    benchpark experiment init --dest=kripke_test kripke single_node=oui openmp=oui
-    benchpark setup kripke_test oci-system workspace/
+    benchpark experiment init --dest kripke-test kripke +single_node +openmp
+    benchpark setup kripke-test/ oci-system/ workspace/
 
 This comand will list a set of addional commands that may differ slightly on your image, examples listed below. 
 Execute the prompted commands to run an experiment.
