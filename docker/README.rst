@@ -37,7 +37,7 @@ You can run the base OCI/Docker image for Benchpark with the following command:
 
 .. code-block:: bash
 
-    docker run -v <path/to/results> --rm -it --name benchpark_container benchpark_base
+    docker run --rm -it -v </host/results/path>:</container/results/path> --name benchpark_container benchpark_base
 
 
 Initialize the Benchpark System
@@ -55,8 +55,8 @@ Initialize/Setup a Single Node Experiment
 
 .. code-block:: bash
     
-    benchpark experiment init --dest kripke-test kripke +single_node +openmp
-    benchpark setup kripke-test/ oci-system/ workspace/
+    benchpark experiment init --dest=kripke-test kripke +single_node +openmp
+    benchpark setup kripke-test/ oci-system/ </container/results/path>/workspace/
 
 This comand will list a set of addional commands that may differ slightly on your image, examples listed below. 
 Execute the prompted commands to run an experiment.
