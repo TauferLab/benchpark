@@ -84,11 +84,12 @@ class System(ExperimentSystemBase):
         self.sys_cores_per_node = None
         self.sys_gpus_per_node = None
         self.sys_mem_per_node = None
+        self.sys_filesystems = None
         self.scheduler = None
         self.timeout = "120"
         self.queue = None
 
-        self.required = ["sys_cores_per_node", "scheduler", "timeout"]
+        self.required = ["sys_cores_per_node", "sys_filesystems", "scheduler", "timeout"]
 
     def generate_description(self, output_dir):
         self.initialize()
@@ -161,6 +162,16 @@ system:
             if not getattr(self, attr, None):
                 raise ValueError(f"Missing required info: {attr}")
 
+        if "default" not in self.sys_filesystems:
+            raise ValueError("Missing required key in 'sys_filesystems': default")
+        
+        filesystems = list()
+        for fs, path in self.sys_filesystems.items():
+            filesystems.append(f"{fs}: {path}")
+        
+        indent = " " * 4
+        filesystems_as_cfg = f"\n{indent}".join(filesystems)
+
         optionals = list()
         for opt in ["sys_gpus_per_node", "sys_mem_per_node", "queue"]:
             if getattr(self, opt, None):
@@ -183,6 +194,8 @@ variables:
   timeout: "{self.timeout}"
   scheduler: "{self.scheduler}"
   sys_cores_per_node: "{self.sys_cores_per_node}"
+  sys_filesystems:
+  {filesystems}
   {extras_as_cfg}
   max_request: "1000"  # n_ranks/n_nodes cannot exceed this
   n_ranks: '1000001'  # placeholder value
