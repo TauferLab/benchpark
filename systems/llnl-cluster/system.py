@@ -11,12 +11,28 @@ from benchpark.system import System
 id_to_resources = {
     "ruby": {
         "sys_cores_per_node": 56,
+        "sys_filesystems": {
+            "default": "/p/lustre1",
+            "lustre1": "/p/lustre1",
+            "lustre2": "/p/lustre2",
+            "lustre3": "/p/lustre3",
+            "vast": "/p/vast1",
+        }
     },
     "magma": {
         "sys_cores_per_node": 96,
+        "sys_filesystems": {
+            "default": "/p/lustre1",
+        }
     },
     "dane": {
         "sys_cores_per_node": 112,
+        "sys_filesystems": {
+            "default": "/p/lustre1",
+            "lustre1": "/p/lustre1",
+            "lustre2": "/p/lustre2",
+            "vast": "/p/vast1",
+        }
     },
 }
 

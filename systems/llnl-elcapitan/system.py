@@ -13,11 +13,22 @@ id_to_resources = {
         "rocm_arch": "gfx90a",
         "sys_cores_per_node": 64,
         "sys_gpus_per_node": 8,
+        "sys_filesystems": {
+            "default": "/p/lustre5",
+            "lustre": "/p/lustre5",
+            "vast": "/p/vast1",
+            "ssd": "/l/ssd",
+        }
     },
     "elcapitan": {
         "rocm_arch": "gfx940",
         "sys_cores_per_node": 128,
         "sys_gpus_per_node": 4,
+        "sys_filesystems": {
+            "default": "/p/lustre4",
+            "lustre": "/p/lustre4",
+            "vast": "/p/vast1",
+        }
     },
 }
 

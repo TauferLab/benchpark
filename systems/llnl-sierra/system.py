@@ -42,6 +42,11 @@ class LlnlSierra(System):
         self.scheduler = "lsf"
         self.sys_cores_per_node = "44"
         self.sys_gpus_per_node = "4"
+        self.sys_filesystems = {
+            "default": "/p/gpfs1",
+            "gpfs": "/p/gpfs1",
+            "vast": "/p/vast1",
+        }
 
     def generate_description(self, output_dir):
         super().generate_description(output_dir)
