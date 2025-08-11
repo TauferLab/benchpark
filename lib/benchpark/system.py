@@ -117,6 +117,7 @@ class System(ExperimentSystemBase):
             "sys_cores_os_reserved_per_node_list",
             "sys_gpus_per_node",
             "sys_mem_per_node",
+            "sys_mountpoints",
             "queue",
         ]:
             if getattr(self, opt, None):
