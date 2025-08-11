@@ -18,15 +18,15 @@ class VariableDict:
 
     # values must be a dict of type str->type or str->list(type)
     def add_dimensional_variable(
-        self, name, values, named=False, zipped=True, matrixed=False
+        self, name, values, named=False, zipped=True, matrixed=False, is_file_path=False
     ):
-        self._vars[name] = Variable(values, named, zipped, matrixed)
+        self._vars[name] = Variable(values, named, zipped, matrixed, is_file_path)
 
     # values must be a non-dict type or list(type)
     def add_scalar_variable(
-        self, name, values, named=False, zipped=False, matrixed=False
+        self, name, values, named=False, zipped=False, matrixed=False, is_file_path=False
     ):
-        self._vars[name] = Variable({name: values}, named, zipped, matrixed)
+        self._vars[name] = Variable({name: values}, named, zipped, matrixed, is_file_path)
 
     def extend(self, vardict):
         if not vardict:
@@ -60,7 +60,7 @@ class VariableDict:
 
 
 class Variable:
-    def __init__(self, var, named=False, zipped=False, matrixed=False):
+    def __init__(self, var, named=False, zipped=False, matrixed=False, is_file_path=False):
         if not isinstance(var, dict):
             raise TypeError(
                 "Input argument to a variable constructor must be a dictionary"
@@ -93,6 +93,7 @@ class Variable:
         self._named = named
         self._zipped = zipped
         self._matrixed = matrixed
+        self._is_file_path = is_file_path
 
     def __getitem__(self, key):
         return self._var[key]
@@ -127,6 +128,10 @@ class Variable:
     @property
     def is_zipped(self):
         return self._zipped
+    
+    @property
+    def is_file_path(self):
+        return self._is_file_path
 
     def reduce(self, func):
         return [reduce(func, col) for col in zip(*self._var.values())]

@@ -3,20 +3,19 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from typing import Dict
-import yaml  # TODO: some way to ensure yaml available
 import sys
 from enum import Enum
-
-from benchpark.error import BenchparkError
-from benchpark.directives import ExperimentSystemBase
-from benchpark.directives import variant
-from benchpark.variables import VariableDict
-import benchpark.spec
-import benchpark.variant
+from typing import Dict
 
 import ramble.language.language_base  # noqa
 import ramble.language.language_helpers  # noqa
+import yaml  # TODO: some way to ensure yaml available
+
+import benchpark.spec
+import benchpark.variant
+from benchpark.directives import ExperimentSystemBase, variant
+from benchpark.error import BenchparkError
+from benchpark.variables import VariableDict
 
 
 class ExperimentHelper:
@@ -344,14 +343,14 @@ class Experiment(ExperimentSystemBase, SingleNode, Affinity, Hwloc):
             modifier_list += cls.compute_modifiers_section()
         return modifier_list
 
-    def add_experiment_variable(self, name, values, named=False, matrixed=False):
+    def add_experiment_variable(self, name, values, named=False, matrixed=False, is_file_path=False):
         if isinstance(values, dict):
-            self.expr_vars.add_dimensional_variable(name, values, named, True, matrixed)
+            self.expr_vars.add_dimensional_variable(name, values, named, True, matrixed, is_file_path)
             self.zips[name] = list(values.keys())
             if matrixed:
                 self.matrix.append(name)
         else:
-            self.expr_vars.add_scalar_variable(name, values, named, False, matrixed)
+            self.expr_vars.add_scalar_variable(name, values, named, False, matrixed, is_file_path)
             if matrixed:
                 self.matrix.append(name)
 
@@ -513,14 +512,18 @@ class Experiment(ExperimentSystemBase, SingleNode, Affinity, Hwloc):
         }
 
     def compute_variables_section(self):
-        return {}
+        self.additional_vars["file_path_variables"] = []
+        for var in self.expr_vars.values():
+            if var.is_file_path:
+                self.additional_vars["file_path_variables"].extend(var.dims())
 
     def compute_variables_section_wrapper(self):
         # For each helper class compute any additional variables
-        additional_vars = {}
+        self.additional_vars = {}
         for cls in self.helpers:
-            additional_vars.update(cls.compute_variables_section())
-        return additional_vars
+            self.additional_vars.update(cls.compute_variables_section())
+        self.compute_variables_section()
+        return self.additional_vars
 
     def compute_ramble_dict(self):
         # This can be overridden by any subclass that needs more flexibility
