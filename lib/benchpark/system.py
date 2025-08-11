@@ -39,6 +39,7 @@ class System(ExperimentSystemBase):
         self.sys_cores_os_reserved_per_node_list = None
         self.sys_gpus_per_node = None
         self.sys_mem_per_node = None
+        self.sys_mountpoints = None
         self.scheduler = None
         self.timeout = "120"
         self.queue = None
