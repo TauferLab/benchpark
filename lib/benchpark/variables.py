@@ -4,6 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
+import os
+import os.path
 from functools import reduce
 
 
@@ -87,6 +89,9 @@ class Variable:
             self._var = {k: v for k, v in var.items()}
         else:
             self._var = {k: [v] for k, v in var.items()}
+        
+        if is_file_path and any(not isinstance(val, (str, os.PathLike)) for val_list in self._var.values() for val in val_list):
+            raise TypeError("All values for a file path variable must be of a string or path-like type")
 
         self._dims = list(self._var.keys())
         self._ndims = len(self._var)
