@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "benchpark": {
+      "command": "uv",
+      "args": ["run", "--script", "mcp-servers/benchpark/server.py"],
+      "timeout": 3600000
+    }
+  }
+}

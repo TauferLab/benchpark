@@ -1,0 +1,10 @@
+# Same as the inline metadata in server.py (used by `uv run --script`).
+mcp>=2.3,<3
+pyyaml
+deepdiff
+packaging
+pytest
+scipy
+llnl-hatchet>=2025.2.0
+llnl-thicket[plotting]>=2026.1.0
+matplotlib

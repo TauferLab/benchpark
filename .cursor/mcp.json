@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "benchpark": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["run", "--script", "${workspaceFolder}/mcp-servers/benchpark/server.py"]
+    }
+  }
+}

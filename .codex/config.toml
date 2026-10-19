@@ -1,0 +1,16 @@
+# Benchpark MCP server for Codex (loaded when this project is trusted).
+# See mcp-servers/benchpark/README.md.
+[mcp_servers.benchpark]
+command = "uv"
+args = ["run", "--script", "mcp-servers/benchpark/server.py"]
+env_vars = ["BENCHPARK_PYTHON", "BENCHPARK_MCP_ROOTS", "BENCHPARK_ROOT"]
+startup_timeout_sec = 120   # first launch installs the server's Python packages
+tool_timeout_sec = 3600     # create_experiment clones Spack/Ramble on first use
+default_tools_approval_mode = "writes"
+
+# These spend or release the user's allocation: always ask.
+[mcp_servers.benchpark.tools.submit]
+approval_mode = "prompt"
+
+[mcp_servers.benchpark.tools.cancel]
+approval_mode = "prompt"
